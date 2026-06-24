@@ -141,7 +141,33 @@ public class LoginView extends javax.swing.JFrame {
     
     
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        // TODO add your handling code here:
+        
+        // 1. Recuperar los datos de los componentes
+        String username = tfNombreUsuario.getText();
+        // Convertimos el char[] del JPasswordField a String de forma segura
+        String password = new String(pfContra.getPassword()); 
+
+        // 2. Invocar al controlador para procesar las validaciones y el login
+        mx.doki.dokipos.controllers.UsuarioController usuarioController = new mx.doki.dokipos.controllers.UsuarioController();
+        String resultado = usuarioController.procesarLogin(username, password);
+
+        // 3. Analizar la respuesta siguiendo tu estructura
+        if (resultado.startsWith("Exito:")) {
+            // Mostrar mensaje de bienvenida
+            javax.swing.JOptionPane.showMessageDialog(this, resultado, "DokiPOS - Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+            // 4. Abrir de forma automatica el MenuPrincipalView (JDialog)
+            // Pasamos 'this' (el JFrame actual) como padre para cumplir con el constructor del JDialog
+            MenuPrincipalView menu = new MenuPrincipalView(this, true); 
+            menu.setLocationRelativeTo(null); // Centrar
+
+            this.dispose(); // Cerrar la pantalla de Login actual
+            menu.setVisible(true); // Mostrar el menu principal
+
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, resultado, "DokiPOS - Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     

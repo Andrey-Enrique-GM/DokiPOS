@@ -12,7 +12,7 @@ public class Conexion
     
     private static String usuario = "root";
     private static String clave = "chihuahua";
-    private static String url = "localhost:3307";
+    private static String url = "jdbc:mysql://localhost:3307/dokipos_db";
     
     private static Connection con;
     
