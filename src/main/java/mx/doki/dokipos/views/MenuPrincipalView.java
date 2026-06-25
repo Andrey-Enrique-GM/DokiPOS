@@ -19,6 +19,9 @@ public class MenuPrincipalView extends javax.swing.JDialog {
         initComponents();
         this.usuarioActivo = usuario;
         
+        setTitle("Doki Market - Sesion Activa");
+        setLocationRelativeTo(null); // Centrar pantalla
+        
         // 1. Inicializar los datos de la interfaz basados en el usuario
         cargarDatosUsuario();
     }
@@ -232,6 +235,7 @@ public class MenuPrincipalView extends javax.swing.JDialog {
         if (usuarioActivo != null && usuarioActivo.getRol().equals("ADMIN")) {
             // Si es ADMIN, abre el inventario
             InventarioView inventario = new InventarioView((java.awt.Frame) this.getParent(), true);
+            inventario.actualizarTabla("");
             inventario.setLocationRelativeTo(null);
             inventario.setVisible(true);
         } else {

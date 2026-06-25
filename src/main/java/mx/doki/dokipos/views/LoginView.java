@@ -15,6 +15,9 @@ public class LoginView extends javax.swing.JFrame {
      */
     public LoginView() {
         initComponents();
+        
+        setTitle("Doki Market - Login");
+        setLocationRelativeTo(null); // Centrar pantalla
     }
 
     

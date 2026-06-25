@@ -13,8 +13,41 @@ public class InventarioView extends javax.swing.JDialog {
     public InventarioView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        setTitle("Doki Market - Stock");
+        setLocationRelativeTo(null); // Centrar pantalla
     }
+    
+    
+    
+    // Instanciar el controlador al inicio de la clase como atributo global de la vista
+    private mx.doki.dokipos.controllers.ProductoController productoController = new mx.doki.dokipos.controllers.ProductoController();
+    
+    
+    
+    void actualizarTabla(String busqueda) {
+        // Obtener el modelo de la tblStock
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblStock.getModel();
 
+        // Limpiar filas viejas para que no se dupliquen al filtrar
+        modelo.setRowCount(0);
+
+        // Traer la lista desde el controlador
+        java.util.List<mx.doki.dokipos.entities.Producto> productos = productoController.buscarProductos(busqueda);
+
+        // Recorrer la lista y añadir fila por fila al JTable
+        for (mx.doki.dokipos.entities.Producto p : productos) {
+            Object[] fila = new Object[] {
+                p.getId(),
+                p.getCodigoBarras(),
+                p.getNombre(),
+                p.getPrecioVenta(),
+                p.getStock()
+            };
+            modelo.addRow(fila);
+        }
+    }
+    
     
     
     /**
@@ -47,6 +80,11 @@ public class InventarioView extends javax.swing.JDialog {
 
         tfBuscar.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         tfBuscar.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        tfBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfBuscarActionPerformed(evt);
+            }
+        });
 
         tblStock.setBackground(new java.awt.Color(153, 204, 255));
         tblStock.setModel(new javax.swing.table.DefaultTableModel(
@@ -181,12 +219,46 @@ public class InventarioView extends javax.swing.JDialog {
     
     
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        // TODO add your handling code here:
+        
+        // Abre el formulario en limpio
+        ProductoForm form = new ProductoForm((java.awt.Frame) this.getParent(), true);
+        form.setLocationRelativeTo(null);
+        form.setVisible(true);
+        
+        // Al cerrar el formulario, refrescamos la tabla por si guardo algo nuevo
+        actualizarTabla("");
+        
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
+        
+        // 1. Validar si el usuario seleccionó una fila de la tabla
+        int filaSeleccionada = tblStock.getSelectedRow();
+        
+        if (filaSeleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto de la tabla.", "DokiPOS", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // TODO: Implementar el paso del ID seleccionado al ProductoForm
+        // Por ahora solo abrimos la vista
+        ProductoForm form = new ProductoForm((java.awt.Frame) this.getParent(), true);
+        form.setLocationRelativeTo(null);
+        form.setVisible(true);
+        
+        // Refrescar al cerrar
+        actualizarTabla("");
+        
     }//GEN-LAST:event_btnModificarActionPerformed
+    
+    
+    
+    private void tfBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfBuscarActionPerformed
+        
+        // Cada que el usuario suelte una tecla, actualizamos la tabla con el texto actual
+        actualizarTabla(tfBuscar.getText());
+        
+    }//GEN-LAST:event_tfBuscarActionPerformed
 
     
     

@@ -13,6 +13,9 @@ public class CajaForm extends javax.swing.JDialog {
     public CajaForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        setTitle("Doki Market - Caja");
+        setLocationRelativeTo(null); // Centrar pantalla
     }
 
     

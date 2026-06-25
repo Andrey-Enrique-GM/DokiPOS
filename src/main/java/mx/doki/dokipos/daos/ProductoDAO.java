@@ -52,4 +52,37 @@ public class ProductoDAO
         }
     }
     
+    
+    
+    public java.util.List<mx.doki.dokipos.entities.Producto> listarYFiltrar(String busqueda) {
+        java.util.List<mx.doki.dokipos.entities.Producto> lista = new java.util.ArrayList<>();
+        // Buscaremos coincidencia exacta o parcial tanto en codigo de barras como en nombre
+        String query = "SELECT id, codigo_barras, nombre, precio_venta, stock FROM productos "
+                     + "WHERE codigo_barras LIKE ? OR nombre LIKE ?";
+        
+        try (java.sql.Connection con = Conexion.obtener();
+             java.sql.PreparedStatement ps = con.prepareStatement(query)) {
+            
+            // El comodin '%' permite buscar coincidencias parciales (Ejemplo, "cup" traera "Cupcake")
+            String parametro = "%" + busqueda + "%";
+            ps.setString(1, parametro);
+            ps.setString(2, parametro);
+            
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    mx.doki.dokipos.entities.Producto p = new mx.doki.dokipos.entities.Producto();
+                    p.setId(rs.getInt("id"));
+                    p.setCodigoBarras(rs.getString("codigo_barras"));
+                    p.setNombre(rs.getString("nombre"));
+                    p.setPrecioVenta(rs.getDouble("precio_venta"));
+                    p.setStock(rs.getInt("stock"));
+                    lista.add(p);
+                }
+            }
+        } catch (java.sql.SQLException e) {
+            System.err.println("Error en ProductoDAO.listarYFiltrar: " + e.getMessage());
+        }
+        return lista;
+    }
+    
 }
