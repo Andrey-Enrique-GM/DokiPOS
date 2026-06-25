@@ -3,6 +3,9 @@ package mx.doki.dokipos.views;
 
 // @author Andrey
 
+import mx.doki.dokipos.entities.Usuario;
+
+
 public class LoginView extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginView.class.getName());
@@ -146,26 +149,27 @@ public class LoginView extends javax.swing.JFrame {
         String username = tfNombreUsuario.getText();
         // Convertimos el char[] del JPasswordField a String de forma segura
         String password = new String(pfContra.getPassword()); 
-
+        
         // 2. Invocar al controlador para procesar las validaciones y el login
-        mx.doki.dokipos.controllers.UsuarioController usuarioController = new mx.doki.dokipos.controllers.UsuarioController();
-        String resultado = usuarioController.procesarLogin(username, password);
-
-        // 3. Analizar la respuesta siguiendo tu estructura
-        if (resultado.startsWith("Exito:")) {
-            // Mostrar mensaje de bienvenida
-            javax.swing.JOptionPane.showMessageDialog(this, resultado, "DokiPOS - Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-
-            // 4. Abrir de forma automatica el MenuPrincipalView (JDialog)
-            // Pasamos 'this' (el JFrame actual) como padre para cumplir con el constructor del JDialog
-            MenuPrincipalView menu = new MenuPrincipalView(this, true); 
-            menu.setLocationRelativeTo(null); // Centrar
-
-            this.dispose(); // Cerrar la pantalla de Login actual
-            menu.setVisible(true); // Mostrar el menu principal
-
+        // Hasheamos la contraseña ingresada
+        mx.doki.dokipos.controllers.UsuarioController control = new mx.doki.dokipos.controllers.UsuarioController();
+        String hash = control.convertirSHA256(password);
+        // Consultamos directo al DAO para obtener la entidad completa del usuario si coincide
+        mx.doki.dokipos.daos.UsuarioDAO usuarioDAO = new mx.doki.dokipos.daos.UsuarioDAO();
+        Usuario usuarioLogueado = usuarioDAO.buscarUsuario(username, hash);
+        
+        // 3. Analizar la respuesta
+        if (usuarioLogueado != null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Exito: Bienvenido " + usuarioLogueado.getNombre(), "DokiPOS", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            
+            // Enviamos 'this' (LoginView), modal true, y el objeto 'usuarioLogueado' con su nombre y rol
+            MenuPrincipalView menu = new MenuPrincipalView(this, true, usuarioLogueado); 
+            menu.setLocationRelativeTo(null);
+            
+            this.setVisible(false); // Ocultamos el Login en lugar de destruirlo para poder volver al cerrar sesion
+            menu.setVisible(true); 
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, resultado, "DokiPOS - Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: Usuario o contraseña incorrectos.", "DokiPOS", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
         
     }//GEN-LAST:event_btnIngresarActionPerformed
