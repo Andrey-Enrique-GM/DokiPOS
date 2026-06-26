@@ -19,9 +19,9 @@ public class LoginView extends javax.swing.JFrame {
         setTitle("Doki Market - Login");
         setLocationRelativeTo(null); // Centrar pantalla
     }
-
     
     
+ 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -163,7 +163,7 @@ public class LoginView extends javax.swing.JFrame {
         
         // 3. Analizar la respuesta
         if (usuarioLogueado != null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Exito: Bienvenido " + usuarioLogueado.getNombre(), "DokiPOS", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Exito: Bienvenido " + usuarioLogueado.getNombre(), "Doki Market", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             
             // Enviamos 'this' (LoginView), modal true, y el objeto 'usuarioLogueado' con su nombre y rol
             MenuPrincipalView menu = new MenuPrincipalView(this, true, usuarioLogueado); 
@@ -172,7 +172,7 @@ public class LoginView extends javax.swing.JFrame {
             this.setVisible(false); // Ocultamos el Login en lugar de destruirlo para poder volver al cerrar sesion
             menu.setVisible(true); 
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Error: Usuario o contraseña incorrectos.", "DokiPOS", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: Usuario o contraseña incorrectos.", "Doki Market", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
         
     }//GEN-LAST:event_btnIngresarActionPerformed

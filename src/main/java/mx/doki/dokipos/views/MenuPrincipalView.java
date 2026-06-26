@@ -242,8 +242,8 @@ public class MenuPrincipalView extends javax.swing.JDialog {
             // Si no es ADMIN, muestra el panel de advertencia
             javax.swing.JOptionPane.showMessageDialog(
                 this, 
-                "Error: No posees los permisos necesarios para acceder a este menú.", 
-                "DokiPOS - Acceso Denegado", 
+                "Error: No posees los permisos necesarios para acceder a este menu.", 
+                "Doki Market - Acceso Denegado", 
                 javax.swing.JOptionPane.WARNING_MESSAGE
             );
         }

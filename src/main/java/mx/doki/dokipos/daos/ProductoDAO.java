@@ -85,4 +85,43 @@ public class ProductoDAO
         return lista;
     }
     
+    
+    
+    public boolean registrar(mx.doki.dokipos.entities.Producto p) {
+        String query = "INSERT INTO productos (codigo_barras, nombre, precio_venta, stock) VALUES (?, ?, ?, ?)";
+        try (java.sql.Connection con = Conexion.obtener();
+             java.sql.PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setString(1, p.getCodigoBarras());
+            ps.setString(2, p.getNombre());
+            ps.setDouble(3, p.getPrecioVenta());
+            ps.setInt(4, p.getStock());
+            
+            return ps.executeUpdate() > 0;
+        } catch (java.sql.SQLException e) {
+            System.err.println("Error en ProductoDAO.registrar: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    
+    
+    public boolean actualizar(mx.doki.dokipos.entities.Producto p) {
+        String query = "UPDATE productos SET codigo_barras = ?, nombre = ?, precio_venta = ?, stock = ? WHERE id = ?";
+        try (java.sql.Connection con = Conexion.obtener();
+             java.sql.PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, p.getCodigoBarras());
+            ps.setString(2, p.getNombre());
+            ps.setDouble(3, p.getPrecioVenta());
+            ps.setInt(4, p.getStock());
+            ps.setInt(5, p.getId());
+            
+            return ps.executeUpdate() > 0;
+        } catch (java.sql.SQLException e) {
+            System.err.println("Error en ProductoDAO.actualizar: " + e.getMessage());
+            return false;
+        }
+    }
+    
 }

@@ -220,9 +220,8 @@ public class InventarioView extends javax.swing.JDialog {
     
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         
-        // Abre el formulario en limpio
-        ProductoForm form = new ProductoForm((java.awt.Frame) this.getParent(), true);
-        form.setLocationRelativeTo(null);
+        // Le pasamos 'null' indicando que no hay producto base (Es nuevo)
+        ProductoForm form = new ProductoForm((java.awt.Frame) this.getParent(), true, null);
         form.setVisible(true);
         
         // Al cerrar el formulario, refrescamos la tabla por si guardo algo nuevo
@@ -232,22 +231,26 @@ public class InventarioView extends javax.swing.JDialog {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         
-        // 1. Validar si el usuario seleccionó una fila de la tabla
+        // Validar si el usuario selecciono una fila de la tabla
         int filaSeleccionada = tblStock.getSelectedRow();
         
         if (filaSeleccionada == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto de la tabla.", "DokiPOS", javax.swing.JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto de la tabla.", "Doki Market", javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        // TODO: Implementar el paso del ID seleccionado al ProductoForm
-        // Por ahora solo abrimos la vista
-        ProductoForm form = new ProductoForm((java.awt.Frame) this.getParent(), true);
-        form.setLocationRelativeTo(null);
+        // Extraer los datos directamente de las columnas del JTable
+        mx.doki.dokipos.entities.Producto p = new mx.doki.dokipos.entities.Producto();
+        p.setId(Integer.parseInt(tblStock.getValueAt(filaSeleccionada, 0).toString()));
+        p.setCodigoBarras(tblStock.getValueAt(filaSeleccionada, 1).toString());
+        p.setNombre(tblStock.getValueAt(filaSeleccionada, 2).toString());
+        p.setPrecioVenta(Double.parseDouble(tblStock.getValueAt(filaSeleccionada, 3).toString()));
+        p.setStock(Integer.parseInt(tblStock.getValueAt(filaSeleccionada, 4).toString()));
+
+        // Se lo pasamos al constructor del formulario
+        ProductoForm form = new ProductoForm((java.awt.Frame) this.getParent(), true, p);
         form.setVisible(true);
-        
-        // Refrescar al cerrar
-        actualizarTabla("");
+        actualizarTabla(""); // Refrescar la tabla al cerrar
         
     }//GEN-LAST:event_btnModificarActionPerformed
     

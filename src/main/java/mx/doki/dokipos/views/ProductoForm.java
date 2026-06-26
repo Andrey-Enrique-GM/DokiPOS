@@ -5,14 +5,32 @@ package mx.doki.dokipos.views;
 
 public class ProductoForm extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProductoForm.class.getName());
+    private String productoIdActual = null;
 
     /**
      * Creates new form ProductoForm
      */
-    public ProductoForm(java.awt.Frame parent, boolean modal) {
+    public ProductoForm(java.awt.Frame parent, boolean modal, mx.doki.dokipos.entities.Producto producto) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null); // Centrar pantalla
+        
+        if (producto == null) {
+            // Configuracion para NUEVO PRODUCTO
+            setTitle("Doki Market - Nuevo Producto");
+            lblNuevoModificar.setText("Doki Market - Nuevo Producto");
+        } else {
+            // Configuracion para MODIFICAR PRODUCTO
+            setTitle("Doki Market - Modificar Producto");
+            lblNuevoModificar.setText("Doki Market - Modificar Producto");
+            
+            // Cargar los datos en los TextFields correspondientes
+            this.productoIdActual = String.valueOf(producto.getId());
+            tfCodigoBarras.setText(producto.getCodigoBarras());
+            tfNombreProducto.setText(producto.getNombre());
+            tfPrecio.setText(String.valueOf(producto.getPrecioVenta()));
+            tfStock.setText(String.valueOf(producto.getStock()));
+        }
     }
 
     
@@ -115,14 +133,13 @@ public class ProductoForm extends javax.swing.JDialog {
                         .addGap(14, 14, 14))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 274, Short.MAX_VALUE))
                             .addComponent(tfCodigoBarras)
+                            .addComponent(tfNombreProducto)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(tfNombreProducto))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         jPanel3Layout.setVerticalGroup(
@@ -180,7 +197,7 @@ public class ProductoForm extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblNuevoModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,51 +233,34 @@ public class ProductoForm extends javax.swing.JDialog {
     
     
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+        
+        String codigo = tfCodigoBarras.getText();
+        String nombre = tfNombreProducto.getText();
+        String precio = tfPrecio.getText();
+        String stock = tfStock.getText();
+        
+        mx.doki.dokipos.controllers.ProductoController control = new mx.doki.dokipos.controllers.ProductoController();
+        
+        // Ejecutar proceso mandando el ID oculto (null si es nuevo, o un numero si es modificacion)
+        String resultado = control.guardarProducto(productoIdActual, codigo, nombre, precio, stock);
+        
+        if (resultado.startsWith("Exito:")) {
+            javax.swing.JOptionPane.showMessageDialog(this, resultado, "Doki Market", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            this.dispose(); // Cierra la vista al guardar con exito
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, resultado, "Doki Market - Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        
+        // Destruye la vista actual sin guardar nada
+        this.dispose();
+        
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                ProductoForm dialog = new ProductoForm(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
