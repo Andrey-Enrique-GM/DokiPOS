@@ -3,21 +3,62 @@ package mx.doki.dokipos.views;
 
 // @author Andrey
 
+import javax.swing.table.DefaultTableModel;
+import mx.doki.dokipos.entities.Usuario;
+
+
 public class CajaForm extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CajaForm.class.getName());
-
+    
+    // Variable global en la vista para recordar quién está cobrando
+    private Usuario usuarioCajero;
+    
     /**
      * Creates new form CajaForm
      */
-    public CajaForm(java.awt.Frame parent, boolean modal) {
+    public CajaForm(java.awt.Frame parent, boolean modal, Usuario usuario) {
         super(parent, modal);
         initComponents();
+        this.usuarioCajero = usuario; // Guardamos la sesion activa
         
         setTitle("Doki Market - Caja");
         setLocationRelativeTo(null); // Centrar pantalla
     }
-
+    
+    
+    
+    // Instancia del controlador de productos para buscar al escanear/teclear
+    private mx.doki.dokipos.controllers.ProductoController productoController = new mx.doki.dokipos.controllers.ProductoController();
+    
+    
+    
+    /**
+    * Recorre todas las filas del JTable, suma los subtotales y refresca el lblTotal
+    */
+   private void recalcularTotal() {
+       DefaultTableModel modelo = (DefaultTableModel) tblCarrito.getModel();
+       double totalAcumulado = 0.0;
+       
+       for (int i = 0; i < modelo.getRowCount(); i++) {
+           totalAcumulado += Double.parseDouble(modelo.getValueAt(i, 4).toString());
+       }
+       
+       lblTotal.setText("TOTAL: $" + String.format("%.2f", totalAcumulado));
+   }
+   
+   
+   
+   /**
+    * Resetea por completo los componentes para dejar la pantalla lista para otra transaccion
+    */
+   private void limpiarPantallaVenta() {
+       tfCodigoBarras.setText("");
+       DefaultTableModel modelo = (DefaultTableModel) tblCarrito.getModel();
+       modelo.setRowCount(0); // Vacia todas las filas del JTable
+       lblTotal.setText("TOTAL: $0.00");
+   }
+   
     
     
     /**
@@ -37,6 +78,7 @@ public class CajaForm extends javax.swing.JDialog {
         tblCarrito = new javax.swing.JTable();
         btnFinalizar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        lblTotal = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -65,10 +107,7 @@ public class CajaForm extends javax.swing.JDialog {
         tblCarrito.setBackground(new java.awt.Color(153, 204, 255));
         tblCarrito.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Código", "Nombre", "Precio", "Cantidad", "Subtotal"
@@ -96,29 +135,37 @@ public class CajaForm extends javax.swing.JDialog {
             }
         });
 
+        lblTotal.setFont(new java.awt.Font("Segoe UI Black", 1, 30)); // NOI18N
+        lblTotal.setForeground(new java.awt.Color(51, 153, 255));
+        lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotal.setText("TOTAL: $0.00");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(tfCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(tfCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 582, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 17, Short.MAX_VALUE)))
+                                .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                            .addComponent(btnFinalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(17, 17, 17)))
                 .addContainerGap())
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,10 +179,12 @@ public class CajaForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18))
         );
 
         jPanel4.setBackground(new java.awt.Color(102, 153, 255));
@@ -201,55 +250,153 @@ public class CajaForm extends javax.swing.JDialog {
     
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+        
+        String codigo = tfCodigoBarras.getText().trim();
+        
+        if (codigo.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor ingrese un codigo de barras.", "Caja", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Buscar si el producto existe usando el DAO de productos
+        mx.doki.dokipos.daos.ProductoDAO productoDAO = new mx.doki.dokipos.daos.ProductoDAO();
+        mx.doki.dokipos.entities.Producto p = productoDAO.obtenerPorCodigo(codigo);
+        
+        if (p == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Producto no encontrado.", "Caja", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        DefaultTableModel modelo = (DefaultTableModel) tblCarrito.getModel();
+        boolean existeEnTabla = false;
+        int filaDestino = -1;
+        
+        // Buscar si el producto ya esta en las filas de la tblCarrito
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            if (modelo.getValueAt(i, 0).toString().equals(p.getCodigoBarras())) {
+                existeEnTabla = true;
+                filaDestino = i;
+                break;
+            }
+        }
+        
+        if (existeEnTabla) {
+            // INCREMENTAR EN +1 CANTIDAD Y AJUSTAR SUBTOTAL
+            int cantidadActual = Integer.parseInt(modelo.getValueAt(filaDestino, 3).toString());
+            int nuevaCantidad = cantidadActual + 1;
+            double subtotalNuevo = p.getPrecioVenta() * nuevaCantidad;
+
+            modelo.setValueAt(nuevaCantidad, filaDestino, 3);
+            modelo.setValueAt(subtotalNuevo, filaDestino, 4);
+        } else {
+            // AGREGAR COMO NUEVO RENGLON
+            Object[] nuevaFila = new Object[] {
+                p.getCodigoBarras(),
+                p.getNombre(),
+                p.getPrecioVenta(),
+                1, // Cantidad inicial
+                p.getPrecioVenta() // Subtotal inicial (Precio * 1)
+            }; 
+            modelo.addRow(nuevaFila);
+        }
+        
+        tfCodigoBarras.setText("");
+        tfCodigoBarras.requestFocus(); // Regresa el cursor para capturar el siguiente
+        recalcularTotal();
+        
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    
+    
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnFinalizarActionPerformed
+        
+        DefaultTableModel modelo = (DefaultTableModel) tblCarrito.getModel();
+        
+        if (modelo.getRowCount() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "El carrito de compras esta vacio.", "Caja", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Armar objeto Venta Maestro
+        mx.doki.dokipos.entities.Venta venta = new mx.doki.dokipos.entities.Venta();
 
+        // Limpiamos la cadena del total para extraer solo el valor numerico flotante
+        String totalTexto = lblTotal.getText().replace("TOTAL: $", "").replace(",", "");
+        double totalVenta = Double.parseDouble(totalTexto);
+        venta.setTotal(totalVenta);
+        
+        if (this.usuarioCajero != null) {
+            venta.setUsuario(this.usuarioCajero); // Vincula de forma automatica el ID real
+        } else {
+            // Proteccion por si acaso corre la vista de forma aislada sin pasar por el login
+            mx.doki.dokipos.entities.Usuario respaldo = new mx.doki.dokipos.entities.Usuario();
+            respaldo.setId(1);
+            venta.setUsuario(respaldo);
+        }
+        
+        // Extraer todos los renglones de la JTable para armar la lista de Detalles
+        java.util.List<mx.doki.dokipos.entities.DetalleVenta> detalles = new java.util.ArrayList<>();
+        mx.doki.dokipos.daos.ProductoDAO prodDAO = new mx.doki.dokipos.daos.ProductoDAO();
+        
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            String codigoProd = modelo.getValueAt(i, 0).toString();
+            int cantidad = Integer.parseInt(modelo.getValueAt(i, 3).toString());
+            double subtotal = Double.parseDouble(modelo.getValueAt(i, 4).toString());
+            
+            // Recuperamos la entidad del producto para amarrarlo al detalle
+            mx.doki.dokipos.entities.Producto p = prodDAO.obtenerPorCodigo(codigoProd);
+            
+            mx.doki.dokipos.entities.DetalleVenta d = new mx.doki.dokipos.entities.DetalleVenta();
+            d.setProducto(p);
+            d.setCantidad(cantidad);
+            d.setSubtotal(subtotal);
+            
+            detalles.add(d);
+        }
+        
+        // Invocar al controlador de ventas
+        mx.doki.dokipos.controllers.VentaController ventaController = new mx.doki.dokipos.controllers.VentaController();
+        String resultado = ventaController.registrarVenta(venta, detalles);
+        
+        if (resultado.startsWith("Exito:")) {
+            javax.swing.JOptionPane.showMessageDialog(this, resultado, "Doki Market - Venta Realizada", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            limpiarPantallaVenta(); // Deja la caja lista para el siguiente cliente
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, resultado, "Doki Market - Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnFinalizarActionPerformed
+    
+    
+    
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        
+        int filaSeleccionada = tblCarrito.getSelectedRow();
+        
+        if (filaSeleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un articulo del carrito para eliminar.", "Caja", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        DefaultTableModel modelo = (DefaultTableModel) tblCarrito.getModel();
+        int cantidad = Integer.parseInt(modelo.getValueAt(filaSeleccionada, 3).toString());
+        double precio = Double.parseDouble(modelo.getValueAt(filaSeleccionada, 2).toString());
+        
+        if (cantidad > 1) {
+            // Solo restamos uno a la cantidad y recalculamos su subtotal
+            int nuevaCantidad = cantidad - 1;
+            modelo.setValueAt(nuevaCantidad, filaSeleccionada, 3);
+            modelo.setValueAt(precio * nuevaCantidad, filaSeleccionada, 4);
+        } else {
+            // Si solo quedaba uno, removemos por completo la fila completa de la tabla
+            modelo.removeRow(filaSeleccionada);
+        }
+        
+        recalcularTotal();
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                CajaForm dialog = new CajaForm(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
@@ -261,6 +408,7 @@ public class CajaForm extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblCarrito;
     private javax.swing.JTextField tfCodigoBarras;
     // End of variables declaration//GEN-END:variables

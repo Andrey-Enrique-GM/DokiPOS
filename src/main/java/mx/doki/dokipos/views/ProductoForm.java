@@ -253,6 +253,8 @@ public class ProductoForm extends javax.swing.JDialog {
         
     }//GEN-LAST:event_btnGuardarActionPerformed
 
+    
+    
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         
         // Destruye la vista actual sin guardar nada

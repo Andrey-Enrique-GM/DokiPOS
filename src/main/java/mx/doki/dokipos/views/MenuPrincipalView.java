@@ -221,7 +221,7 @@ public class MenuPrincipalView extends javax.swing.JDialog {
         
         // Crea la instancia de la ventana CajaForm pasandole el Frame padre (LoginView)
         // Para obtener el Frame padre desde un JDialog usamos (java.awt.Frame) this.getParent()
-        CajaForm caja = new CajaForm((java.awt.Frame) this.getParent(), true);
+        CajaForm caja = new CajaForm((java.awt.Frame) this.getParent(), true, this.usuarioActivo);
         caja.setLocationRelativeTo(null);
         caja.setVisible(true);
         

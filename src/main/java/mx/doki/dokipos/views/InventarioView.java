@@ -229,6 +229,8 @@ public class InventarioView extends javax.swing.JDialog {
         
     }//GEN-LAST:event_btnNuevoActionPerformed
 
+    
+    
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         
         // Validar si el usuario selecciono una fila de la tabla

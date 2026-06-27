@@ -15,7 +15,7 @@ public class UsuarioController
     // Metodo principal para procesar el Login
     public String procesarLogin(String username, String password) {
         
-        // 1. Validar que los campos no esten vacios
+        // Validar que los campos no esten vacios
         if (username == null || username.trim().isEmpty()) {
             return "Error: El campo de usuario no puede estar vacio";
         }
@@ -23,7 +23,7 @@ public class UsuarioController
             return "Error: El campo de contraseña no puede estar vacio";
         }
 
-        // 2. Convertir contraseña ingresada a SHA-256 para compararla en la BD
+        // Convertir contraseña ingresada a SHA-256 para compararla en la BD
         String passwordHash = convertirSHA256(password);
         if (passwordHash == null) {
             return "Error: Fallo critico al procesar la seguridad del sistema";
@@ -31,7 +31,7 @@ public class UsuarioController
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         
-        // 3. Buscar en la base de datos
+        // Buscar en la base de datos
         Usuario usuario = usuarioDAO.buscarUsuario(username.trim(), passwordHash);
 
         if (usuario != null) {
