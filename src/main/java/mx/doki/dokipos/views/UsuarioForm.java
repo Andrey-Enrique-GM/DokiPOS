@@ -3,37 +3,40 @@ package mx.doki.dokipos.views;
 
 // @author Andrey
 
-public class ProductoForm extends javax.swing.JDialog {
+import mx.doki.dokipos.entities.Usuario;
+
+
+public class UsuarioForm extends javax.swing.JDialog {
     
-    private String productoIdActual = null;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UsuarioForm.class.getName());
 
     /**
-     * Creates new form ProductoForm
+     * Creates new form UsuarioForm
      */
-    public ProductoForm(java.awt.Frame parent, boolean modal, mx.doki.dokipos.entities.Producto producto) {
-        super(parent, modal);
+    public UsuarioForm(java.awt.Frame parent, boolean moda, mx.doki.dokipos.entities.Usuario usuario) {
+        //super(parent, modal);
         initComponents();
         setLocationRelativeTo(null); // Centrar pantalla
         
-        if (producto == null) {
-            // Configuracion para NUEVO PRODUCTO
-            setTitle("Doki Market - Nuevo Producto");
-            lblNuevoModificar.setText("Doki Market - Nuevo Producto");
+        if (usuario == null) {
+            // Configuracion para NUEVO USUARIO
+            setTitle("Doki Market - Nuevo Usuario");
+            lblNuevoModificar.setText("Doki Market - Nuevo Usuario");
         } else {
-            // Configuracion para MODIFICAR PRODUCTO
-            setTitle("Doki Market - Modificar Producto");
-            lblNuevoModificar.setText("Doki Market - Modificar Producto");
+            // Configuracion para MODIFICAR USUARIO
+            setTitle("Doki Market - Modificar Usuario");
+            lblNuevoModificar.setText("Doki Market - Modificar Usuario");
             
+            /*
             // Cargar los datos en los TextFields correspondientes
             this.productoIdActual = String.valueOf(producto.getId());
             tfCodigoBarras.setText(producto.getCodigoBarras());
             tfNombreProducto.setText(producto.getNombre());
             tfPrecio.setText(String.valueOf(producto.getPrecioVenta()));
             tfStock.setText(String.valueOf(producto.getStock()));
+            */
         }
     }
-
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,14 +49,14 @@ public class ProductoForm extends javax.swing.JDialog {
 
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        tfCodigoBarras = new javax.swing.JTextField();
+        tfUsername = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        tfNombreProducto = new javax.swing.JTextField();
+        tfNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        tfPrecio = new javax.swing.JTextField();
+        tfContra = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        tfStock = new javax.swing.JTextField();
+        tfRol = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -65,10 +68,10 @@ public class ProductoForm extends javax.swing.JDialog {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 2, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 153, 255));
-        jLabel2.setText("Código de Barras:");
+        jLabel2.setText("Nombre de Usuario:");
 
-        tfCodigoBarras.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        tfCodigoBarras.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        tfUsername.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        tfUsername.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 
         btnGuardar.setBackground(new java.awt.Color(51, 153, 255));
         btnGuardar.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
@@ -90,26 +93,26 @@ public class ProductoForm extends javax.swing.JDialog {
             }
         });
 
-        tfNombreProducto.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        tfNombreProducto.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        tfNombre.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        tfNombre.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 2, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 153, 255));
-        jLabel3.setText("Nombre del Producto:");
+        jLabel3.setText("Nombre Completo:");
 
-        tfPrecio.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        tfPrecio.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        tfContra.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        tfContra.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 2, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 153, 255));
-        jLabel4.setText("Precio de Venta:");
+        jLabel4.setText("Contraseña:");
 
-        tfStock.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        tfStock.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        tfRol.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        tfRol.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 2, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 153, 255));
-        jLabel5.setText("Stock Actual:");
+        jLabel5.setText("Rol:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -119,18 +122,22 @@ public class ProductoForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-                                .addComponent(tfPrecio)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfStock)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)))
-                    .addComponent(tfCodigoBarras)
-                    .addComponent(tfNombreProducto)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tfContra, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tfRol, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))))
+                    .addComponent(tfUsername)
+                    .addComponent(tfNombre)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -144,21 +151,21 @@ public class ProductoForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(tfContra, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfStock, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tfRol, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,7 +191,7 @@ public class ProductoForm extends javax.swing.JDialog {
         lblNuevoModificar.setFont(new java.awt.Font("Segoe UI Black", 3, 24)); // NOI18N
         lblNuevoModificar.setForeground(new java.awt.Color(255, 255, 255));
         lblNuevoModificar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNuevoModificar.setText("Doki Market - 22092017 Producto");
+        lblNuevoModificar.setText("Doki Market - 22092017 Usuario");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -225,39 +232,19 @@ public class ProductoForm extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    
     
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        
-        String codigo = tfCodigoBarras.getText();
-        String nombre = tfNombreProducto.getText();
-        String precio = tfPrecio.getText();
-        String stock = tfStock.getText();
-        
-        mx.doki.dokipos.controllers.ProductoController control = new mx.doki.dokipos.controllers.ProductoController();
-        
-        // Ejecutar proceso mandando el ID oculto (null si es nuevo, o un numero si es modificacion)
-        String resultado = control.guardarProducto(productoIdActual, codigo, nombre, precio, stock);
-        
-        if (resultado.startsWith("Exito:")) {
-            javax.swing.JOptionPane.showMessageDialog(this, resultado, "Doki Market", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            this.dispose(); // Cierra la vista al guardar con exito
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, resultado, "Doki Market - Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
-        
-    }//GEN-LAST:event_btnGuardarActionPerformed
 
-    
+        
+
+    }//GEN-LAST:event_btnGuardarActionPerformed
     
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        
-        // Destruye la vista actual sin guardar nada
-        this.dispose();
-        
-    }//GEN-LAST:event_btnCancelarActionPerformed
 
+        
+
+    }//GEN-LAST:event_btnCancelarActionPerformed
+    
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -271,9 +258,9 @@ public class ProductoForm extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel lblNuevoModificar;
-    private javax.swing.JTextField tfCodigoBarras;
-    private javax.swing.JTextField tfNombreProducto;
-    private javax.swing.JTextField tfPrecio;
-    private javax.swing.JTextField tfStock;
+    private javax.swing.JTextField tfContra;
+    private javax.swing.JTextField tfNombre;
+    private javax.swing.JTextField tfRol;
+    private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 }

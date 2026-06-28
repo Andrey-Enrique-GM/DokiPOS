@@ -3,44 +3,45 @@ package mx.doki.dokipos.views;
 
 // @author Andrey
 
-public class InventarioView extends javax.swing.JDialog {
+public class UsuariosView extends javax.swing.JDialog {
     
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UsuariosView.class.getName());
+
     /**
-     * Creates new form InventarioView
+     * Creates new form UsuariosView
      */
-    public InventarioView(java.awt.Frame parent, boolean modal) {
+    public UsuariosView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
-        setTitle("Doki Market - Stock");
+        setTitle("Doki Market - Usuarios");
         setLocationRelativeTo(null); // Centrar pantalla
     }
     
     
     
     // Instanciar el controlador al inicio de la clase como atributo global de la vista
-    private mx.doki.dokipos.controllers.ProductoController productoController = new mx.doki.dokipos.controllers.ProductoController();
+    private mx.doki.dokipos.controllers.UsuarioController usuarioController = new mx.doki.dokipos.controllers.UsuarioController();
     
     
     
     void actualizarTabla(String busqueda) {
-        // Obtener el modelo de la tblStock
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblStock.getModel();
+        // Obtener el modelo de tblUsuarios
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblUsuarios.getModel();
 
-        // Limpiar filas viejas para que no se dupliquen al filtrar
+        // Limpiar filas viejas
         modelo.setRowCount(0);
 
         // Traer la lista desde el controlador
-        java.util.List<mx.doki.dokipos.entities.Producto> productos = productoController.buscarProductos(busqueda);
+        java.util.List<mx.doki.dokipos.entities.Usuario> usuarios = usuarioController.buscarUsuarios(busqueda);
 
-        // Recorrer la lista y añadir fila por fila al JTable
-        for (mx.doki.dokipos.entities.Producto p : productos) {
+        // Recorrer la lista y añadir fila por fila (Omitiendo el campo password por completo)
+        for (mx.doki.dokipos.entities.Usuario u : usuarios) {
             Object[] fila = new Object[] {
-                p.getId(),
-                p.getCodigoBarras(),
-                p.getNombre(),
-                p.getPrecioVenta(),
-                p.getStock()
+                u.getId(),
+                u.getUsername(),
+                u.getNombre(),
+                u.getRol()
             };
             modelo.addRow(fila);
         }
@@ -61,7 +62,7 @@ public class InventarioView extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         tfBuscar = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblStock = new javax.swing.JTable();
+        tblUsuarios = new javax.swing.JTable();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -84,24 +85,21 @@ public class InventarioView extends javax.swing.JDialog {
             }
         });
 
-        tblStock.setBackground(new java.awt.Color(153, 204, 255));
-        tblStock.setModel(new javax.swing.table.DefaultTableModel(
+        tblUsuarios.setBackground(new java.awt.Color(153, 204, 255));
+        tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "ID", "Código", "Nombre", "Precio", "Stock"
+                "ID", "Username", "Nombre", "Rol"
             }
         ));
-        jScrollPane1.setViewportView(tblStock);
+        jScrollPane1.setViewportView(tblUsuarios);
 
         btnNuevo.setBackground(new java.awt.Color(51, 153, 255));
         btnNuevo.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
-        btnNuevo.setText("Nuevo Producto");
+        btnNuevo.setText("Nuevo Usuario");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoActionPerformed(evt);
@@ -128,13 +126,13 @@ public class InventarioView extends javax.swing.JDialog {
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 302, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(tfBuscar))
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52))
         );
@@ -172,7 +170,7 @@ public class InventarioView extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 3, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("Doki Market - Stock");
+        jLabel1.setText("Doki Market - Usuarios");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -213,46 +211,6 @@ public class InventarioView extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    
-    
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        
-        // Le pasamos 'null' indicando que no hay producto base (Es nuevo)
-        ProductoForm form = new ProductoForm((java.awt.Frame) this.getParent(), true, null);
-        form.setVisible(true);
-        
-        // Al cerrar el formulario, refrescamos la tabla por si guardo algo nuevo
-        actualizarTabla("");
-        
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    
-    
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        
-        // Validar si el usuario selecciono una fila de la tabla
-        int filaSeleccionada = tblStock.getSelectedRow();
-        
-        if (filaSeleccionada == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto de la tabla.", "Doki Market", javax.swing.JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // Extraer los datos directamente de las columnas del JTable
-        mx.doki.dokipos.entities.Producto p = new mx.doki.dokipos.entities.Producto();
-        p.setId(Integer.parseInt(tblStock.getValueAt(filaSeleccionada, 0).toString()));
-        p.setCodigoBarras(tblStock.getValueAt(filaSeleccionada, 1).toString());
-        p.setNombre(tblStock.getValueAt(filaSeleccionada, 2).toString());
-        p.setPrecioVenta(Double.parseDouble(tblStock.getValueAt(filaSeleccionada, 3).toString()));
-        p.setStock(Integer.parseInt(tblStock.getValueAt(filaSeleccionada, 4).toString()));
-
-        // Se lo pasamos al constructor del formulario
-        ProductoForm form = new ProductoForm((java.awt.Frame) this.getParent(), true, p);
-        form.setVisible(true);
-        actualizarTabla(""); // Refrescar la tabla al cerrar
-        
-    }//GEN-LAST:event_btnModificarActionPerformed
     
     
     
@@ -264,7 +222,48 @@ public class InventarioView extends javax.swing.JDialog {
     }//GEN-LAST:event_tfBuscarActionPerformed
     
     
+    
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        
+        // Le pasamos 'null' indicando que no hay producto base (Es nuevo)
+        UsuarioForm form = new UsuarioForm((java.awt.Frame) this.getParent(), true, null);
+        form.setVisible(true);
+        
+        // Al cerrar el formulario, refrescamos la tabla por si guardo algo nuevo
+        actualizarTabla("");
+        
+    }//GEN-LAST:event_btnNuevoActionPerformed
+    
+    
+    
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        
+        // Validar si el usuario selecciono una fila de la tabla
+        int filaSeleccionada = tblUsuarios.getSelectedRow();
+        
+        if (filaSeleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario de la tabla.", "Doki Market", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Extraemos el objeto Usuario de las columnas visibles de la fila seleccionada
+        mx.doki.dokipos.entities.Usuario u = new mx.doki.dokipos.entities.Usuario();
+        u.setId(Integer.parseInt(tblUsuarios.getValueAt(filaSeleccionada, 0).toString()));
+        u.setUsername(tblUsuarios.getValueAt(filaSeleccionada, 1).toString());
+        u.setNombre(tblUsuarios.getValueAt(filaSeleccionada, 2).toString());
+        u.setRol(tblUsuarios.getValueAt(filaSeleccionada, 3).toString());
+        // El password se queda vacio momentaneamente porque no esta en la tabla, se resolvera en UsuarioForm.
 
+        // Abrimos el formulario pasandole el usuario mapeado
+        UsuarioForm form = new UsuarioForm((java.awt.Frame) this.getParent(), true, u);
+        form.setVisible(true);
+        
+        actualizarTabla("");
+        
+    }//GEN-LAST:event_btnModificarActionPerformed
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
@@ -274,7 +273,7 @@ public class InventarioView extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblStock;
+    private javax.swing.JTable tblUsuarios;
     private javax.swing.JTextField tfBuscar;
     // End of variables declaration//GEN-END:variables
 }
