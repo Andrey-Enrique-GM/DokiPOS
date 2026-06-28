@@ -27,7 +27,6 @@ public class Conexion
             if (con == null || con.isClosed()) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 con = DriverManager.getConnection(url, usuario, clave);
-                System.out.println("Conexion establecida con el servidor!");
             }
         } catch (Exception ex) {
             System.err.println("Error de conexion: " + ex.getMessage());

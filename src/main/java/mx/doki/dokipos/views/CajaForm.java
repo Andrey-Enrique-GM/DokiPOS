@@ -9,8 +9,6 @@ import mx.doki.dokipos.entities.Usuario;
 
 public class CajaForm extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CajaForm.class.getName());
-    
     // Variable global en la vista para recordar quién está cobrando
     private Usuario usuarioCajero;
     
@@ -24,12 +22,39 @@ public class CajaForm extends javax.swing.JDialog {
         
         setTitle("Doki Market - Caja");
         setLocationRelativeTo(null); // Centrar pantalla
+        
+        // Agregar producto con la tecla Enter
+        tfCodigoBarras.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                // Invoca directamente al evento del boton agregar al pulsar Enter
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        
+        // Forzar foco inicial cuando la ventana aparezca en pantalla
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowOpened(java.awt.event.WindowEvent e) {
+                tfCodigoBarras.requestFocusInWindow();
+            }
+        });
+
+        // Si cualquier elemento del sistema le quita el foco, el cuadro lo reclama al instante
+        tfCodigoBarras.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                // Usamos invokeLater para esperar que terminen otros procesos visuales de Swing antes de retomar el foco
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tfCodigoBarras.requestFocusInWindow();
+                    }
+                });
+            }
+        });
+        
     }
-    
-    
-    
-    // Instancia del controlador de productos para buscar al escanear/teclear
-    private mx.doki.dokipos.controllers.ProductoController productoController = new mx.doki.dokipos.controllers.ProductoController();
     
     
     
@@ -57,6 +82,7 @@ public class CajaForm extends javax.swing.JDialog {
        DefaultTableModel modelo = (DefaultTableModel) tblCarrito.getModel();
        modelo.setRowCount(0); // Vacia todas las filas del JTable
        lblTotal.setText("TOTAL: $0.00");
+       tfCodigoBarras.requestFocusInWindow();
    }
    
     
@@ -254,7 +280,7 @@ public class CajaForm extends javax.swing.JDialog {
         String codigo = tfCodigoBarras.getText().trim();
         
         if (codigo.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Por favor ingrese un codigo de barras.", "Caja", javax.swing.JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor ingrese un codigo de barras.", "Doki Market", javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -263,7 +289,7 @@ public class CajaForm extends javax.swing.JDialog {
         mx.doki.dokipos.entities.Producto p = productoDAO.obtenerPorCodigo(codigo);
         
         if (p == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Producto no encontrado.", "Caja", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Producto no encontrado.", "Doki Market", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -278,6 +304,29 @@ public class CajaForm extends javax.swing.JDialog {
                 filaDestino = i;
                 break;
             }
+        }
+        
+        // Validacion de stock disponible
+        int cantidadAComprar = 1; // Si es nuevo, pretendemos agregar 1
+        if (existeEnTabla) {
+            // Si ya esta en la tabla, la cantidad pretendida sera la actual + 1
+            int cantidadActual = Integer.parseInt(modelo.getValueAt(filaDestino, 3).toString());
+            cantidadAComprar = cantidadActual + 1;
+        }
+
+        // Comparamos lo que el cliente quiere llevar contra el stock actual en la Base de Datos
+        if (cantidadAComprar > p.getStock()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "No hay suficiente stock disponible para: " + p.getNombre() + "\n" +
+                "Stock actual: " + p.getStock() + "\n" +
+                "Cantidad intentada: " + cantidadAComprar, 
+                "Doki Market - Stock Insuficiente", 
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            tfCodigoBarras.setText("");
+            tfCodigoBarras.requestFocus();
+            return; // Detiene por completo el flujo y no altera el carrito
         }
         
         if (existeEnTabla) {
@@ -313,7 +362,7 @@ public class CajaForm extends javax.swing.JDialog {
         DefaultTableModel modelo = (DefaultTableModel) tblCarrito.getModel();
         
         if (modelo.getRowCount() == 0) {
-            javax.swing.JOptionPane.showMessageDialog(this, "El carrito de compras esta vacio.", "Caja", javax.swing.JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "El carrito de compras esta vacio.", "Doki Market", javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -374,7 +423,8 @@ public class CajaForm extends javax.swing.JDialog {
         int filaSeleccionada = tblCarrito.getSelectedRow();
         
         if (filaSeleccionada == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un articulo del carrito para eliminar.", "Caja", javax.swing.JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un articulo del carrito para eliminar.", "Doki Market", javax.swing.JOptionPane.WARNING_MESSAGE);
+            tfCodigoBarras.requestFocusInWindow();
             return;
         }
         
@@ -392,7 +442,10 @@ public class CajaForm extends javax.swing.JDialog {
             modelo.removeRow(filaSeleccionada);
         }
         
+        javax.swing.JOptionPane.showMessageDialog(this, "Articulo eliminado con exito.", "Doki Market", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        
         recalcularTotal();
+        tfCodigoBarras.requestFocusInWindow();
         
     }//GEN-LAST:event_btnEliminarActionPerformed
 

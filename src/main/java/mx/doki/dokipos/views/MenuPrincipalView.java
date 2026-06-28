@@ -254,11 +254,16 @@ public class MenuPrincipalView extends javax.swing.JDialog {
     
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         
-        // 1. Cerrar este menu principal
-        this.dispose();
+        // Obtenemos la referencia al Frame padre
+        java.awt.Frame padre = (java.awt.Frame) this.getParent();
+        mx.doki.dokipos.views.LoginView login = (mx.doki.dokipos.views.LoginView) padre;
         
-        // 2. Volver a hacer visible el LoginView que estaba oculto en el fondo
-        this.getParent().setVisible(true);
+        // Ejecutamos la limpieza de texto antes de mostrarlo
+        login.limpiarCampos(); 
+        login.setVisible(true);
+        
+        // Cerrar este menu principal
+        this.dispose();
         
     }//GEN-LAST:event_btnSalirActionPerformed
 

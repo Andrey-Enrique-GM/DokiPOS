@@ -21,6 +21,14 @@ public class LoginView extends javax.swing.JFrame {
     }
     
     
+    
+    public void limpiarCampos() {
+        tfNombreUsuario.setText("");
+        pfContra.setText("");
+        tfNombreUsuario.requestFocus();
+    }
+    
+    
  
     /**
      * This method is called from within the constructor to initialize the form.
@@ -98,8 +106,8 @@ public class LoginView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pfContra, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46)
-                .addComponent(btnIngresar)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(102, 153, 255));
