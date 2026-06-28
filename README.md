@@ -42,4 +42,3 @@ Desglosa renglón por renglón los artículos adquiridos dentro de un mismo tick
 * `id_producto` **(INT, FOREIGN KEY):** Vinculación al artículo comprado en la tabla `productos`.
 * `cantidad` **(INT, NOT NULL):** Número de piezas vendidas de este artículo.
 * `subtotal` **(DECIMAL(10,2), NOT NULL):** El resultado financiero de multiplicar la cantidad por el precio de venta del artículo.
-* 
