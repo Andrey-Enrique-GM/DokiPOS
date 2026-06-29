@@ -39,7 +39,7 @@
                   <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+              <Component id="jPanel3" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -55,17 +55,27 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="tfUsername" alignment="0" max="32767" attributes="0"/>
+                      <Component id="tfNombre" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
+                              <Component id="jLabel2" alignment="0" min="-2" pref="386" max="-2" attributes="0"/>
+                              <Component id="jLabel3" alignment="0" min="-2" pref="386" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="lblNota" alignment="0" pref="370" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                                   <Component id="btnGuardar" min="-2" pref="250" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="tfContra" min="-2" pref="370" max="-2" attributes="0"/>
-                              <Component id="jLabel4" alignment="1" min="-2" pref="370" max="-2" attributes="0"/>
+                              <Component id="tfContra" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel4" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -75,18 +85,9 @@
                               </Group>
                               <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel5" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="tfRol" alignment="1" pref="200" max="32767" attributes="0"/>
+                                  <Component id="cbxRol" alignment="1" pref="217" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                      </Group>
-                      <Component id="tfUsername" alignment="0" max="32767" attributes="0"/>
-                      <Component id="tfNombre" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel2" alignment="0" min="-2" pref="386" max="-2" attributes="0"/>
-                              <Component id="jLabel3" alignment="0" min="-2" pref="386" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -105,7 +106,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="tfNombre" min="-2" pref="53" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -114,10 +115,12 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="tfRol" min="-2" pref="53" max="-2" attributes="0"/>
+                          <Component id="cbxRol" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="92" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblNota" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="70" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnGuardar" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
                       <Component id="btnCancelar" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
@@ -219,14 +222,6 @@
             <Property name="text" type="java.lang.String" value="Contrase&#xf1;a:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfRol">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI Black" size="14" style="0"/>
-            </Property>
-            <Property name="horizontalAlignment" type="int" value="2"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -237,6 +232,30 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Rol:"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblNota">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI Black" size="12" style="2"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="f2" green="aa" red="86" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="(Dejar en blanco si no desea cambiar la contrase&#xf1;a)"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cbxRol">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="2">
+                <StringItem index="0" value="CAJERO"/>
+                <StringItem index="1" value="ADMIN"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

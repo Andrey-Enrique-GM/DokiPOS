@@ -6,7 +6,9 @@ package mx.doki.dokipos.views;
 public class UsuariosView extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UsuariosView.class.getName());
-
+    
+    
+    
     /**
      * Creates new form UsuariosView
      */

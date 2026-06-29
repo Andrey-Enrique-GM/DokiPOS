@@ -12,6 +12,8 @@ public class CajaForm extends javax.swing.JDialog {
     // Variable global en la vista para recordar quién está cobrando
     private Usuario usuarioCajero;
     
+    
+    
     /**
      * Creates new form CajaForm
      */
@@ -58,9 +60,7 @@ public class CajaForm extends javax.swing.JDialog {
     
     
     
-    /**
-    * Recorre todas las filas del JTable, suma los subtotales y refresca el lblTotal
-    */
+   // Recorre todas las filas del JTable, suma los subtotales y refresca el lblTotal
    private void recalcularTotal() {
        DefaultTableModel modelo = (DefaultTableModel) tblCarrito.getModel();
        double totalAcumulado = 0.0;

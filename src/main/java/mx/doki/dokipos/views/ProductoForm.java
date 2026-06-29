@@ -6,7 +6,9 @@ package mx.doki.dokipos.views;
 public class ProductoForm extends javax.swing.JDialog {
     
     private String productoIdActual = null;
-
+    
+    
+    
     /**
      * Creates new form ProductoForm
      */

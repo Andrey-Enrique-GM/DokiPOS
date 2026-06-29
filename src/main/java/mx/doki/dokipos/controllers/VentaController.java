@@ -15,6 +15,7 @@ public class VentaController
     private VentaDAO ventaDAO = new VentaDAO();
     
     
+    
     public String registrarVenta(Venta venta, List<DetalleVenta> detalles) {
         // Validar que la venta lleve articulos
         if (detalles == null || detalles.isEmpty()) {

@@ -10,7 +10,9 @@ public class MenuPrincipalView extends javax.swing.JDialog {
     
     // Variable global dentro de la vista para recordar quien esta logueado
     private Usuario usuarioActivo;
-
+    
+    
+    
     /**
      * Creates new form MenuPrincipalView
      */
@@ -22,7 +24,7 @@ public class MenuPrincipalView extends javax.swing.JDialog {
         setTitle("Doki Market - Sesion Activa");
         setLocationRelativeTo(null); // Centrar pantalla
         
-        // 1. Inicializar los datos de la interfaz basados en el usuario
+        // Inicializar los datos de la interfaz basados en el usuario
         cargarDatosUsuario();
     }
     
@@ -33,6 +35,7 @@ public class MenuPrincipalView extends javax.swing.JDialog {
             // Actualizar el label con el nombre real de la columna 'nombre'
             lblNombre.setText("Bienvenid@, " + usuarioActivo.getNombre());
             if (!usuarioActivo.getRol().equals("ADMIN")) { btnInventario.setEnabled(false); }
+            if (!usuarioActivo.getRol().equals("ADMIN")) { btnUsuarios.setEnabled(false); }
         }
     }
 
@@ -294,7 +297,9 @@ public class MenuPrincipalView extends javax.swing.JDialog {
         this.dispose();
         
     }//GEN-LAST:event_btnSalirActionPerformed
-
+    
+    
+    
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         
          // Validar si el rol es estrictamente ADMIN

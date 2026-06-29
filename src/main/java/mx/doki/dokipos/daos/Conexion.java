@@ -17,6 +17,7 @@ public class Conexion
     private static Connection con;
     
     
+    
     /**
      * Metodo estatico para obtener la conexion a la base de datos.
      * @return Objeto Connection activo.

@@ -96,7 +96,7 @@ public class UsuarioDAO
         // Inicialmente preparamos el query asumiendo que modificaremos la contraseña
         String query = "UPDATE usuarios SET username = ?, password = ?, nombre = ?, rol = ? WHERE id = ?";
         
-        // Pero si viene vacia o nula, significa que no se altero en el Formulario
+        // Pero si viene vacia o nula, significa que no se altero en el formulario
         boolean cambiarPassword = (u.getPassword() != null && !u.getPassword().trim().isEmpty());
         
         if (!cambiarPassword) {

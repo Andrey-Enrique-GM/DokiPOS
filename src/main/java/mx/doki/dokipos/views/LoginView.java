@@ -9,7 +9,9 @@ import mx.doki.dokipos.entities.Usuario;
 public class LoginView extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginView.class.getName());
-
+    
+    
+    
     /**
      * Creates new form LoginView
      */
@@ -151,17 +153,17 @@ public class LoginView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     
     
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         
-        // 1. Recuperar los datos de los componentes
+        // Recuperar los datos de los componentes
         String username = tfNombreUsuario.getText();
         // Convertimos el char[] del JPasswordField a String de forma segura
         String password = new String(pfContra.getPassword()); 
         
-        // 2. Invocar al controlador para procesar las validaciones y el login
+        // Invocar al controlador para procesar las validaciones y el login
         // Hasheamos la contraseña ingresada
         mx.doki.dokipos.controllers.UsuarioController control = new mx.doki.dokipos.controllers.UsuarioController();
         String hash = control.convertirSHA256(password);
@@ -169,7 +171,7 @@ public class LoginView extends javax.swing.JFrame {
         mx.doki.dokipos.daos.UsuarioDAO usuarioDAO = new mx.doki.dokipos.daos.UsuarioDAO();
         Usuario usuarioLogueado = usuarioDAO.buscarUsuario(username, hash);
         
-        // 3. Analizar la respuesta
+        // Analizar la respuesta
         if (usuarioLogueado != null) {
             javax.swing.JOptionPane.showMessageDialog(this, "Exito: Bienvenido " + usuarioLogueado.getNombre(), "Doki Market", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             

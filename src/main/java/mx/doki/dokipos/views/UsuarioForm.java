@@ -3,18 +3,21 @@ package mx.doki.dokipos.views;
 
 // @author Andrey
 
-import mx.doki.dokipos.entities.Usuario;
-
-
 public class UsuarioForm extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UsuarioForm.class.getName());
+    // Atributo global para almacenar el ID del usuario en caso de modificacion
+    private String usuarioIdActual = "";
+    
+    // Instancia del controlador de usuarios
+    private mx.doki.dokipos.controllers.UsuarioController usuarioController = new mx.doki.dokipos.controllers.UsuarioController();
+    
+    
 
     /**
      * Creates new form UsuarioForm
      */
-    public UsuarioForm(java.awt.Frame parent, boolean moda, mx.doki.dokipos.entities.Usuario usuario) {
-        //super(parent, modal);
+    public UsuarioForm(java.awt.Frame parent, boolean modal, mx.doki.dokipos.entities.Usuario usuario) {
+        super(parent, modal);
         initComponents();
         setLocationRelativeTo(null); // Centrar pantalla
         
@@ -22,21 +25,28 @@ public class UsuarioForm extends javax.swing.JDialog {
             // Configuracion para NUEVO USUARIO
             setTitle("Doki Market - Nuevo Usuario");
             lblNuevoModificar.setText("Doki Market - Nuevo Usuario");
+            
+            usuarioIdActual = "";
+            lblNota.setVisible(false); // Ocultamos la nota por completo al crear uno nuevo
         } else {
             // Configuracion para MODIFICAR USUARIO
             setTitle("Doki Market - Modificar Usuario");
             lblNuevoModificar.setText("Doki Market - Modificar Usuario");
             
-            /*
-            // Cargar los datos en los TextFields correspondientes
-            this.productoIdActual = String.valueOf(producto.getId());
-            tfCodigoBarras.setText(producto.getCodigoBarras());
-            tfNombreProducto.setText(producto.getNombre());
-            tfPrecio.setText(String.valueOf(producto.getPrecioVenta()));
-            tfStock.setText(String.valueOf(producto.getStock()));
-            */
+            lblNota.setVisible(true); // Hacemos visible la nota aclaratoria
+            
+            // Poblar los componentes con los datos del usuario a modificar
+            this.usuarioIdActual = String.valueOf(usuario.getId());
+            tfUsername.setText(usuario.getUsername());
+            tfNombre.setText(usuario.getNombre());
+            tfContra.setText(""); // El campo de contraseña se queda completamente vacio
+            
+            // Asignar el rol correcto en el ComboBox
+            cbxRol.setSelectedItem(usuario.getRol());
         }
     }
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,8 +66,9 @@ public class UsuarioForm extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         tfContra = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        tfRol = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        lblNota = new javax.swing.JLabel();
+        cbxRol = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         lblNuevoModificar = new javax.swing.JLabel();
@@ -107,12 +118,15 @@ public class UsuarioForm extends javax.swing.JDialog {
         jLabel4.setForeground(new java.awt.Color(102, 153, 255));
         jLabel4.setText("Contraseña:");
 
-        tfRol.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        tfRol.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 2, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(102, 153, 255));
         jLabel5.setText("Rol:");
+
+        lblNota.setFont(new java.awt.Font("Segoe UI Black", 2, 12)); // NOI18N
+        lblNota.setForeground(new java.awt.Color(134, 170, 242));
+        lblNota.setText("(Dejar en blanco si no desea cambiar la contraseña)");
+
+        cbxRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CAJERO", "ADMIN" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -121,13 +135,21 @@ public class UsuarioForm extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfUsername)
+                    .addComponent(tfNombre)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lblNota, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addGap(23, 23, 23)
                                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(tfContra, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tfContra, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -135,14 +157,7 @@ public class UsuarioForm extends javax.swing.JDialog {
                                 .addGap(32, 32, 32))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(tfRol, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))))
-                    .addComponent(tfUsername)
-                    .addComponent(tfNombre)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(cbxRol, javax.swing.GroupLayout.Alignment.TRAILING, 0, 217, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -157,7 +172,7 @@ public class UsuarioForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -165,8 +180,10 @@ public class UsuarioForm extends javax.swing.JDialog {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfRol, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                        .addComponent(cbxRol)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblNota)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -227,21 +244,43 @@ public class UsuarioForm extends javax.swing.JDialog {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    
+    
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 
+        // Recuperar los valores escritos por el usuario en la interfaz
+        String username = tfUsername.getText();
+        String nombre = tfNombre.getText();
+        String contra = tfContra.getText();
+        String rol = cbxRol.getSelectedItem().toString();
         
+        // Mandar los datos recopilados al controlador para su validacion y procesamiento
+        String resultado = usuarioController.guardarUsuario(usuarioIdActual, username, contra, nombre, rol);
+        
+        // Analizar la respuesta devuelta por el backend
+        if (resultado.startsWith("Exito")) {
+            // Mostrar mensaje informativo de exito
+            javax.swing.JOptionPane.showMessageDialog(this, resultado, "Doki Market", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            this.dispose(); // Cerrar el formulario y regresar a la vista de la tabla
+        } else {
+            // Mostrar mensaje de error en las validaciones
+            javax.swing.JOptionPane.showMessageDialog(this, resultado, "Doki Market", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
 
     }//GEN-LAST:event_btnGuardarActionPerformed
     
+    
+    
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
 
-        
+        // Destruye la vista actual sin guardar nada
+        this.dispose();
 
     }//GEN-LAST:event_btnCancelarActionPerformed
     
@@ -250,6 +289,7 @@ public class UsuarioForm extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JComboBox<String> cbxRol;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -257,10 +297,10 @@ public class UsuarioForm extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel lblNota;
     private javax.swing.JLabel lblNuevoModificar;
     private javax.swing.JTextField tfContra;
     private javax.swing.JTextField tfNombre;
-    private javax.swing.JTextField tfRol;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 }
